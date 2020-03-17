@@ -1,6 +1,7 @@
 package calculator
 
 import java.lang.IllegalArgumentException
+import java.math.BigInteger
 import java.util.Scanner
 
 private fun String.isNumber() = this.matches(Regex("[0-9]+"))
@@ -178,13 +179,13 @@ private fun convertToPostfixNotation(expressionParts: MutableList<String>): Muta
     return result
 }
 
-private fun calculateExpressionFromPostfixNotation(postfixNotationExpression: MutableList<String>): Int {
-    val finalResultStack = mutableListOf<Int>()
+private fun calculateExpressionFromPostfixNotation(postfixNotationExpression: MutableList<String>): BigInteger {
+    val finalResultStack = mutableListOf<BigInteger>()
 
     for (expressionPart in postfixNotationExpression) {
         when {
             expressionPart.isNumber() -> {
-                finalResultStack.push(expressionPart.toInt())
+                finalResultStack.push(BigInteger(expressionPart))
             }
             expressionPart.isVariable() -> {
                 finalResultStack.push(getValue(expressionPart))
@@ -208,7 +209,7 @@ private fun calculateExpressionFromPostfixNotation(postfixNotationExpression: Mu
     return finalResultStack.peek()
 }
 
-private fun getValue(operand: String): Int = if (operand.isNumber()) operand.toInt() else variables[operand]!!.toInt()
+private fun getValue(operand: String): BigInteger = if (operand.isNumber()) BigInteger(operand) else BigInteger(variables[operand]!!)
 
 private fun operateVariables(expression: String) {
     val pureExpression = expression.replace(" ", "")
